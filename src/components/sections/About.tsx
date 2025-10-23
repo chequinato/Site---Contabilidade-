@@ -33,29 +33,23 @@ export function About() {
         <div className="flex flex-col lg:flex-row items-center">
           {/* Image Section */}
           <div className="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
-            <div className="relative rounded-xl overflow-hidden shadow-xl">
+            <div className="bg-white p-8 rounded-xl overflow-hidden shadow-xl">
               <div className="aspect-w-16 aspect-h-9">
-                <div className="w-full h-96 bg-gradient-to-r from-primary-400 to-primary-600 flex items-center justify-center text-white text-2xl font-bold">
+                <div className="bg-gradient-to-r from-primary-100 to-primary-50 p-12 rounded-xl mb-8 flex items-center justify-center text-primary-600 text-2xl font-bold">
                   [Imagem da Equipe]
                 </div>
-              </div>
-              
-              {/* Experience Badge */}
-              <div className="absolute -bottom-6 right-8 bg-white rounded-lg shadow-lg p-4 text-center">
-                <span className="block text-3xl font-bold text-primary-600">15+</span>
-                <span className="text-sm text-gray-600">Anos de Experiência</span>
               </div>
             </div>
 
             {/* Features */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
               {features.map((feature, index) => (
-                <div key={index} className="bg-white p-4 rounded-lg shadow-md text-center">
-                  <div className="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100">
+                  <div className="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-3">
                     {feature.icon}
                   </div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{feature.title}</h4>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
+                  <p className="text-gray-600">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -66,7 +60,7 @@ export function About() {
             <span className="inline-block px-4 py-1 text-sm font-semibold text-primary-700 bg-primary-100 rounded-full mb-4">
               Sobre Nós
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
               Excelência em Serviços Contábeis
             </h2>
             <p className="text-gray-600 mb-6">
@@ -83,14 +77,14 @@ export function About() {
             <div className="space-y-3 mb-8">
               {aboutPoints.map((point, index) => (
                 <div key={index} className="flex items-start">
-                  <FaCheckCircle className="text-green-500 mt-1 mr-3 flex-shrink-0" />
+                  <FaCheckCircle className="text-primary-600 mt-1 mr-3 flex-shrink-0" />
                   <span className="text-gray-700">{point}</span>
                 </div>
               ))}
             </div>
 
-            <div className="bg-primary-50 border-l-4 border-primary-600 p-4 rounded-r-lg">
-              <p className="text-primary-800 font-medium">
+            <div className="bg-primary-50 border-l-4 border-primary-600 p-6 rounded-r-lg">
+              <p className="text-primary-600 italic text-lg mb-4">
                 "Comprometidos com a excelência e satisfação dos nossos clientes, buscamos sempre superar 
                 expectativas e entregar resultados que realmente fazem a diferença no seu negócio."
               </p>

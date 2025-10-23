@@ -1,4 +1,5 @@
-import { FaChartLine, FaHandHoldingUsd, FaFileInvoiceDollar, FaUsers } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { FaChartLine, FaHandHoldingUsd, FaFileInvoiceDollar, FaUsers, FaAward } from 'react-icons/fa';
 
 export function Hero() {
   const features = [
@@ -24,21 +25,59 @@ export function Hero() {
     }
   ];
 
+  const [yearsExperience, setYearsExperience] = useState(0);
+
+  useEffect(() => {
+    // Animar contador de anos de experiência
+    const targetYears = 15;
+    const duration = 2000; // 2 segundos
+    const stepTime = 50; // atualização a cada 50ms
+    
+    const steps = duration / stepTime;
+    const increment = targetYears / steps;
+    let current = 0;
+    
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= targetYears) {
+        setYearsExperience(targetYears);
+        clearInterval(timer);
+      } else {
+        setYearsExperience(Math.floor(current));
+      }
+    }, stepTime);
+    
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section id="home" className="relative w-full bg-gradient-to-r from-primary-50 to-primary-100 overflow-hidden">
-      <div className="absolute inset-0 opacity-10 w-full">
-        <div className="absolute inset-0 w-full bg-grid-primary-300/25 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.8))]"></div>
-      </div>
-      
-      <div className="relative container mx-auto px-4 py-20 lg:py-28">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              Soluções Contábeis para o <span className="text-primary-600">Seu Negócio</span>
+    <section className="relative bg-gradient-to-b from-primary-50 to-white py-16 md:py-24 overflow-hidden">
+      <div className="absolute inset-0 bg-[url('/src/assets/pattern.png')] opacity-5"></div>
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center">
+          {/* Text Content */}
+          <div className="lg:w-1/2 mb-12 lg:mb-0">
+            <div className="inline-block bg-primary-50 text-primary-700 text-sm font-semibold px-4 py-1 rounded-full mb-4">
+              <span className="flex items-center">
+                <FaAward className="mr-2" /> Marcos Contábil
+              </span>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              Seu parceiro estratégico para <span className="text-primary-600">crescer com segurança</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-lg mx-auto lg:mx-0">
-              Oferecemos serviços contábeis completos para ajudar sua empresa a crescer com segurança e tranquilidade.
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+              Soluções contábeis completas e personalizadas para empresas de todos os portes, 
+              garantindo conformidade fiscal e crescimento sustentável.
             </p>
+            <div className="flex items-center mb-8 max-w-lg mx-auto lg:mx-0">
+              <div className="flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 text-primary-600 mr-4">
+                <FaAward className="text-2xl" />
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-primary-600">+{yearsExperience}</div>
+                <div className="text-gray-600 text-sm">Anos de Experiência</div>
+              </div>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a
                 href="#contact"
@@ -59,15 +98,15 @@ export function Hero() {
             {features.map((feature, index) => (
               <div 
                 key={index}
-                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100"
+                className="bg-primary-600 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="w-12 h-12 flex items-center justify-center bg-primary-50 rounded-full mb-4 mx-auto">
-                  {feature.icon}
+                <div className="w-12 h-12 flex items-center justify-center bg-white/20 rounded-full mb-4 mx-auto">
+                  {React.cloneElement(feature.icon, { className: 'text-2xl text-white' })}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">
+                <h3 className="text-lg font-semibold text-white mb-2 text-center">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-sm text-center">
+                <p className="text-white/90 text-sm text-center">
                   {feature.description}
                 </p>
               </div>

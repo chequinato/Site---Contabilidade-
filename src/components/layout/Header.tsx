@@ -36,7 +36,7 @@ export function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <a href="#" className="text-2xl font-bold text-primary-700">
-            <span className="text-primary-600">Contábil</span>Master
+            <span className="text-primary-600">Marcos</span> Contábil
           </a>
 
           {/* Desktop Navigation */}
@@ -45,9 +45,10 @@ export function Header() {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-primary-600 font-medium transition-colors"
+                className="relative text-gray-700 hover:text-primary-600 font-medium transition-all duration-300 group"
               >
                 {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </nav>
@@ -56,7 +57,7 @@ export function Header() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-primary-600 focus:outline-none"
+              className="text-gray-700 hover:text-primary-600 focus:outline-none transition-transform duration-300 hover:rotate-90"
               aria-label="Toggle menu"
             >
               {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -72,7 +73,7 @@ export function Header() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100"
+                  className="block px-4 py-3 rounded-md text-gray-700 hover:bg-primary-50 hover:pl-6 transition-all duration-300"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
@@ -80,7 +81,7 @@ export function Header() {
               ))}
               <a
                 href="#"
-                className="block px-3 py-2 rounded-md bg-primary-600 text-white text-center hover:bg-primary-700"
+                className="block px-4 py-3 rounded-md bg-primary-600 text-white text-center hover:bg-primary-700 transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-lg"
               >
                 Área do Cliente
               </a>
