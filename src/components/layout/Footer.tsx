@@ -1,4 +1,5 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock } from 'react-icons/fa';
+import NewsletterForm from '../NewsletterForm';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -110,54 +111,33 @@ export function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div className="bg-gray-800 rounded-xl p-6 mb-12">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-6">
-              <h3 className="text-xl font-semibold text-white mb-2">Assine Nossa Newsletter</h3>
-              <p className="text-gray-400">Receba dicas e atualizações diretamente no seu e-mail.</p>
-            </div>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-              <input
-                type="email"
-                placeholder="Seu melhor e-mail"
-                className="flex-grow px-4 py-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors whitespace-nowrap"
-              >
-                Assinar
-              </button>
-            </form>
+        <NewsletterForm />
+      </div>
+
+      {/* Copyright e Links Legais */}
+      <div className="pt-8 border-t border-gray-800">
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-500 text-sm mb-4 md:mb-0">
+            &copy; {currentYear} ContábilMaster. Todos os direitos reservados.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
+              Política de Privacidade
+            </a>
+            <span className="text-gray-600">|</span>
+            <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
+              Termos de Uso
+            </a>
+            <span className="text-gray-600">|</span>
+            <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
+              Política de Cookies
+            </a>
           </div>
         </div>
-
-        {/* Copyright e Links Legais */}
-        <div className="pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-500 text-sm mb-4 md:mb-0">
-              &copy; {currentYear} ContábilMaster. Todos os direitos reservados.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
-                Política de Privacidade
-              </a>
-              <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
-                Termos de Uso
-              </a>
-              <span className="text-gray-600">|</span>
-              <a href="#" className="text-gray-500 hover:text-primary-400 transition-colors">
-                Política de Cookies
-              </a>
-            </div>
-          </div>
-          <div className="mt-4 text-center md:text-left">
-            <p className="text-xs text-gray-600">
-              ContábilMaster Contabilidade - CRC/SP 1.234.567/O-1 - CNPJ: 12.345.678/0001-90
-            </p>
-          </div>
+        <div className="mt-4 text-center md:text-left">
+          <p className="text-xs text-gray-600">
+            ContábilMaster Contabilidade - CRC/SP 1.234.567/O-1 - CNPJ: 12.345.678/0001-90
+          </p>
         </div>
       </div>
     </footer>

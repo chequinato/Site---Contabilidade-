@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { FaBars, FaTimes, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaTimes, FaPhoneAlt, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import UserMenu from '../UserMenu';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,16 +18,28 @@ export function Header() {
       {/* Top Bar */}
       <div className="w-full bg-primary-500 text-white text-sm">
         <div className="w-full max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <a href="tel:+5511999999999" className="flex items-center hover:text-primary-200 transition-colors">
-              <FaPhoneAlt className="mr-2" /> (11) 99999-9999
+          <div className="flex items-center space-x-6">
+            <a 
+              href="https://wa.me/5511965927355" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden md:flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm transition-all duration-200 transform hover:scale-105"
+            >
+              <FaWhatsapp className="w-5 h-5 mr-2" />
+              <span className="font-medium">Entre em contato conosco</span>
             </a>
-            <a href="mailto:contato@contador.com.br" className="hidden md:flex items-center hover:text-primary-200 transition-colors">
-              <FaEnvelope className="mr-2" /> contato@contador.com.br
-            </a>
+            <div className="hidden md:block w-px h-6 bg-white/20"></div>
+            <div className="flex items-center space-x-4">
+              <a href="tel:+5511965927355" className="flex items-center hover:text-primary-200 transition-colors">
+                <FaPhoneAlt className="mr-2" /> (11) 96592-7355
+              </a>
+              <a href="mailto:contato@contador.com.br" className="hidden lg:flex items-center hover:text-primary-200 transition-colors">
+                <FaEnvelope className="mr-2" /> contato@contador.com.br
+              </a>
+            </div>
           </div>
           <div className="hidden md:flex items-center space-x-4">
-            <a href="#" className="hover:text-primary-200 transition-colors">Área do Cliente</a>
+            <UserMenu />
           </div>
         </div>
       </div>
