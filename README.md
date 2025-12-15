@@ -1,73 +1,294 @@
-# React + TypeScript + Vite
+Site Institucional – Escritório de Contabilidade 📊🏢
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web desenvolvida com foco em captação de clientes e aumento de conversão para um escritório de contabilidade. O projeto foi construído utilizando React + TypeScript + Vite, com Supabase como backend (BaaS), integração com APIs e uma UI/UX diferenciada, pensada estrategicamente para gerar leads e impulsionar vendas.
 
-Currently, two official plugins are available:
+────────────────────
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Visão Geral
 
-## React Compiler
+O projeto consiste em uma landing page institucional moderna, criada para transmitir credibilidade, profissionalismo e facilitar o contato entre potenciais clientes e o escritório contábil.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+A aplicação apresenta informações claras sobre serviços, diferenciais competitivos e formulários de contato totalmente integrados ao backend, permitindo a persistência e gestão dos leads captados.
 
-## Expanding the ESLint configuration
+────────────────────
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Objetivo do Projeto
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+O objetivo principal da aplicação é:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+alavancar vendas
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+captar novos clientes
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+fortalecer a presença digital do escritório
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+facilitar o primeiro contato comercial
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+O site funciona como uma ferramenta comercial digital.
+
+────────────────────
+
+Problema que o projeto resolve
+
+Muitos escritórios de contabilidade ainda utilizam sites:
+
+visualmente ultrapassados
+
+sem foco em conversão
+
+sem backend para armazenar contatos
+
+sem integração com serviços externos
+
+Este projeto resolve esses problemas ao oferecer:
+
+design moderno e responsivo
+
+UI/UX focadas em conversão
+
+formulários funcionais com backend
+
+integração via API
+
+────────────────────
+
+Funcionalidades
+
+Landing page institucional
+Apresentação de serviços contábeis
+UI e UX focadas em conversão
+Formulário de contato integrado
+Persistência de leads no banco de dados
+Integração com API
+Design responsivo
+Arquitetura moderna frontend
+
+────────────────────
+
+UI e UX
+
+A interface foi desenhada pensando em experiência do usuário e conversão comercial.
+
+Principais cuidados:
+
+hierarquia visual clara
+
+CTAs estrategicamente posicionados
+
+layout limpo e profissional
+
+navegação simples e intuitiva
+
+adaptação completa para mobile e desktop
+
+────────────────────
+
+Frontend com React, TypeScript e Vite
+
+O frontend foi desenvolvido utilizando:
+
+React para construção da interface
+
+TypeScript para tipagem estática e segurança
+
+Vite como bundler, garantindo build rápido e Hot Module Replacement (HMR)
+
+O projeto utiliza um setup moderno e performático, ideal para aplicações em produção.
+
+────────────────────
+
+Qualidade de Código e ESLint
+
+O projeto conta com uma configuração avançada de ESLint, voltada para aplicações em produção:
+
+Regras type-aware com TypeScript
+
+Configurações strict e stylistic
+
+Análise baseada em múltiplos tsconfig
+
+Ignora diretório de build (dist)
+
+Plugins utilizados:
+
+eslint-plugin-react-x
+
+eslint-plugin-react-dom
+
+Essa configuração garante:
+
+código mais seguro
+
+menos bugs em runtime
+
+padronização e legibilidade
+
+────────────────────
+
+Backend com Supabase
+
+O Supabase é utilizado como Backend as a Service (BaaS), oferecendo:
+
+Banco de dados PostgreSQL
+
+API REST automática
+
+Cliente JavaScript para integração
+
+Persistência dos dados dos formulários
+
+Essa abordagem elimina a necessidade de um backend tradicional, acelerando o desenvolvimento.
+
+────────────────────
+
+Integração com API
+
+A aplicação se comunica com o Supabase por meio de:
+
+API REST
+
+requisições HTTP utilizando fetch
+
+Supabase Client SDK
+
+Essas integrações garantem o envio e armazenamento seguro das informações dos clientes.
+
+────────────────────
+
+Banco de Dados
+
+O banco de dados é gerenciado pelo Supabase (PostgreSQL) e armazena:
+
+nome do cliente
+
+email
+
+telefone
+
+mensagem enviada
+
+data de contato
+
+Esses dados servem como base para ações comerciais futuras.
+
+────────────────────
+
+Tecnologias e Bibliotecas Utilizadas
+Frontend
+
+React
+
+TypeScript
+
+Vite
+
+HTML5
+
+CSS3
+
+Qualidade e Padronização
+
+ESLint
+
+@vitejs/plugin-react
+
+@vitejs/plugin-react-swc
+
+eslint-plugin-react-x
+
+eslint-plugin-react-dom
+
+Backend / BaaS
+
+Supabase
+
+PostgreSQL
+
+Integrações
+
+API REST
+
+HTTP (fetch)
+
+Outras Ferramentas
+
+Git
+
+GitHub
+
+Variáveis de ambiente (.env)
+
+Deploy web
+
+────────────────────
+
+Arquitetura do Projeto
+
+Frontend desacoplado do backend
+Supabase como serviço de backend
+Comunicação via API
+Separação clara entre UI, lógica e dados
+
+Arquitetura simples, moderna e escalável.
+
+────────────────────
+
+Pré-requisitos
+
+Node.js 18+
+npm ou yarn
+Conta no Supabase
+
+────────────────────
+
+Instalação
+
+Clonar o repositório
+Instalar dependências
+Configurar variáveis de ambiente
+Executar o projeto localmente ou realizar deploy
+
+────────────────────
+
+Variáveis de Ambiente
+
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+
+────────────────────
+
+Casos de Uso
+
+Sites institucionais
+Landing pages comerciais
+Captação de leads
+Presença digital empresarial
+Projetos focados em conversão
+
+────────────────────
+
+Melhorias Futuras
+
+Integração com email marketing
+Dashboard administrativo para leads
+Automação de respostas
+SEO avançado
+Integração com CRM
+
+────────────────────
+
+O que este projeto pratica
+
+React com TypeScript em produção
+Setup moderno com Vite
+UI e UX focadas em negócio
+Integração com Supabase
+Uso avançado de ESLint
+Arquitetura frontend moderna
+
+────────────────────
+
+Licença
+
+MIT License
+Projeto desenvolvido por Chequinato
