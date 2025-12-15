@@ -67,18 +67,18 @@ export function Contact() {
     {
       icon: <FaPhoneAlt className="text-primary-600 text-xl" />,
       title: 'Telefone',
-      description: '(11) 99999-9999',
-      details: '(11) 99999-9999',
-      link: 'https://wa.me/5511999999999',
+      description: '(11) 96592-7355',
+      details: '(11) 96592-7355',
+      link: 'https://wa.me/5511965927355',
       linkText: 'Fale pelo WhatsApp',
       linkIcon: <FaWhatsapp className="ml-1 text-green-500" />
     },
     {
       icon: <FaEnvelope className="text-primary-600 text-xl" />,
       title: 'E-mail',
-      description: 'contato@contadormaster.com.br',
-      details: 'suporte@contadormaster.com.br',
-      link: 'mailto:contato@contadormaster.com.br',
+      description: 'martrovo@uol.com.br',
+      details: 'martrovo@uol.com.br',
+      link: 'mailto:martrovo@uol.com.br',
       linkText: 'Enviar E-mail'
     },
     {
@@ -146,115 +146,115 @@ export function Contact() {
               </motion.div>
             ))}
           </div>
-          <motion.div 
-            variants={fadeInUp}
-            className="bg-white rounded-xl shadow-lg overflow-hidden"
-          >
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Entre em Contato</h2>
-            <p className="text-gray-600 mb-6">Preencha o formulário abaixo ou nos envie uma mensagem diretamente.</p>
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-1">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome Completo</label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="Seu nome completo"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail</label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="Seu e-mail"
-                      required
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-1">
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Telefone</label>
-                  <div className="relative">
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="Seu telefone"
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700">Assunto</label>
-                  <div className="relative">
-                    <select
-                      id="subject"
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 bg-green-800 text-white border border-green-600 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-transparent placeholder-green-300 appearance-none bg-white pr-10 transition-all duration-200"
-                      required
-                    >
-                      <option value="">Selecione um assunto</option>
-                      <option value="contabilidade">Contabilidade</option>
-                      <option value="fiscal">Consultoria Fiscal</option>
-                      <option value="dp">Departamento Pessoal</option>
-                      <option value="outro">Outro</option>
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700">Mensagem</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-green-800 text-white border border-green-600 rounded-lg focus:ring-2 focus:ring-yellow-300 focus:border-transparent placeholder-green-300 transition-all duration-200"
-                  placeholder="Como podemos te ajudar?"
-                  required
-                ></textarea>
-              </div>
-              <div>
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-300"
-                  >
-                    <span className="font-medium">Enviar Mensagem</span>
-                    <FaPaperPlane className="transform transition-transform group-hover:translate-x-1" />
-                  </button>
-                </div>
-              </div>
-              <p className="text-sm text-gray-500 mt-4">
-                * Campos obrigatórios
-              </p>
-            </form>
-          </motion.div>
+          <motion.div
+  variants={fadeInUp}
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true }}
+  className="bg-white p-10 rounded-2xl shadow-lg border border-gray-200"
+>
+  <h2 className="text-3xl font-bold text-gray-900 mb-4">Entre em Contato</h2>
+  <p className="text-gray-600 mb-8 text-lg">
+    Preencha o formulário abaixo ou nos envie uma mensagem diretamente.
+  </p>
+
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* Linha 1 */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-1">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nome Completo</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="Seu nome completo"
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+        />
+      </div>
+      <div className="space-y-1">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">E-mail</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Seu e-mail"
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+        />
+      </div>
+    </div>
+
+    {/* Linha 2 */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-1">
+        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Telefone</label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="Seu telefone"
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+        />
+      </div>
+      <div className="space-y-1 relative">
+        <label htmlFor="subject" className="block text-sm font-medium text-gray-700">Assunto</label>
+        <select
+          id="subject"
+          name="subject"
+          value={formData.subject}
+          onChange={handleChange}
+          required
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent appearance-none transition pr-10"
+        >
+          <option value="">Selecione um assunto</option>
+          <option value="contabilidade">Contabilidade</option>
+          <option value="fiscal">Consultoria Fiscal</option>
+          <option value="dp">Departamento Pessoal</option>
+          <option value="outro">Outro</option>
+        </select>
+        <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-500">
+          <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M5.23 7.21l4.77 4.77 4.77-4.77 1.06 1.06-5.83 5.83-5.83-5.83z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    {/* Mensagem */}
+    <div className="space-y-1">
+      <label htmlFor="message" className="block text-sm font-medium text-gray-700">Mensagem</label>
+      <textarea
+        id="message"
+        name="message"
+        rows={5}
+        value={formData.message}
+        onChange={handleChange}
+        placeholder="Como podemos te ajudar?"
+        required
+        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+      ></textarea>
+    </div>
+
+    {/* Botão */}
+    <button
+      type="submit"
+      className="w-full flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 rounded-xl transition-all duration-300"
+    >
+      Enviar Mensagem <FaPaperPlane className="transform transition-transform group-hover:translate-x-1" />
+    </button>
+
+    <p className="text-sm text-gray-500 mt-2">* Campos obrigatórios</p>
+  </form>
+</motion.div>
+
         </motion.div>
         
         {/* Mapa */}

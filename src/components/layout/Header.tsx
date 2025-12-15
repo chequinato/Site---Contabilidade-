@@ -1,9 +1,32 @@
-import { useState } from 'react';
-import { FaBars, FaTimes, FaPhoneAlt, FaEnvelope, FaWhatsapp } from 'react-icons/fa';
-import UserMenu from '../UserMenu';
+import { useState, useRef, useEffect } from 'react';
+import { FaBars, FaTimes, FaPhoneAlt, FaEnvelope, FaWhatsapp, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fechar o dropdown ao clicar fora dele
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const services = [
+    { name: 'Consultoria', href: '/consultoria' },
+    { name: 'Gestão Financeira', href: '/gestao-financeira' },
+    { name: 'Folha de Pagamento', href: '/folha-pagamento' },
+    { name: 'Tributação', href: '/tributacao' },
+    { name: 'Previdenciário', href: '/previdenciario' },
+  ];
 
   const navigation = [
     { name: 'Início', href: '#home' },
@@ -33,14 +56,12 @@ export function Header() {
               <a href="tel:+5511965927355" className="flex items-center hover:text-primary-200 transition-colors">
                 <FaPhoneAlt className="mr-2" /> (11) 96592-7355
               </a>
-              <a href="mailto:contato@contador.com.br" className="hidden lg:flex items-center hover:text-primary-200 transition-colors">
-                <FaEnvelope className="mr-2" /> contato@contador.com.br
+              <a href="mailto:martrovo@uol.com.br" className="hidden lg:flex items-center hover:text-primary-200 transition-colors">
+                <FaEnvelope className="mr-2" /> martrovo@uol.com.br
               </a>
             </div>
           </div>
-          <div className="hidden md:flex items-center space-x-4">
-            <UserMenu />
-          </div>
+          {/* Botão de Área do Cliente removido conforme solicitado */}
         </div>
       </div>
 
@@ -53,7 +74,7 @@ export function Header() {
           </a>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden md:flex space-x-8 items-center">
             {navigation.map((item) => (
               <a
                 key={item.name}
@@ -64,6 +85,37 @@ export function Header() {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
+            
+            {/* Menu Suspenso de Outros Serviços */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsServicesOpen(!isServicesOpen)}
+                className="flex items-center text-gray-700 hover:text-primary-600 font-medium transition-all duration-300 group"
+              >
+                Outros Serviços
+                {isServicesOpen ? (
+                  <FaChevronUp className="ml-1 text-sm" />
+                ) : (
+                  <FaChevronDown className="ml-1 text-sm" />
+                )}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-600 transition-all duration-300 group-hover:w-full"></span>
+              </button>
+              
+              {isServicesOpen && (
+                <div className="absolute left-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                  {services.map((service) => (
+                    <a
+                      key={service.name}
+                      href={service.href}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-600"
+                      onClick={() => setIsServicesOpen(false)}
+                    >
+                      {service.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Mobile menu button */}
@@ -90,6 +142,20 @@ export function Header() {
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
+                </a>
+              ))}
+              
+              {/* Menu de Serviços para Mobile */}
+              <div className="border-t border-gray-100 my-2"></div>
+              <div className="px-4 py-2 font-medium text-gray-500">Outros Serviços</div>
+              {services.map((service) => (
+                <a
+                  key={service.name}
+                  href={service.href}
+                  className="block px-6 py-2 text-sm text-gray-600 hover:bg-primary-50 hover:text-primary-600"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {service.name}
                 </a>
               ))}
               <a

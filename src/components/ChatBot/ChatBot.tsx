@@ -8,7 +8,10 @@ type Message = {
 };
 
 export default function ChatBot() {
-  const [isOpen, setIsOpen] = useState(true);
+  // Verifica se é a primeira vez que o usuário acessa o site
+  const [hasOpenedBefore, setHasOpenedBefore] = useState<boolean | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -20,6 +23,31 @@ export default function ChatBot() {
       timestamp: new Date()
     }
   ]);
+
+  // Efeito para carregar o estado do localStorage
+  useEffect(() => {
+    const chatState = localStorage.getItem('chatState');
+    if (chatState === 'opened') {
+      setHasOpenedBefore(true);
+      setIsOpen(false);
+    } else {
+      setHasOpenedBefore(false);
+      setIsOpen(true);
+      localStorage.setItem('chatState', 'opened');
+    }
+  }, []);
+
+  const handleOpenChat = () => {
+    setIsOpen(true);
+    setShowTooltip(false);
+  };
+
+  const handleCloseChat = () => {
+    setIsOpen(false);
+    setShowTooltip(true);
+    // Esconde o tooltip após 5 segundos
+    setTimeout(() => setShowTooltip(false), 5000);
+  };
 
   // Efeito para rolar para a última mensagem quando uma nova for adicionada
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -177,30 +205,23 @@ export default function ChatBot() {
     // Código removido - usando apenas a API da OpenAI
   };
 
+  // Não renderiza nada até verificar o estado do localStorage
+  if (hasOpenedBefore === null) return null;
+
   return (
-    <div className="fixed bottom-8 right-8 z-50">
+    <div className="fixed bottom-8 right-8 z-50 flex items-end flex-col">
       {isOpen ? (
         <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-80 flex flex-col" style={{ height: '600px' }}>
           {/* Cabeçalho do Chat */}
-          <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.84 8.84 0 01-4.016-.957 5.567 5.567 0 01-1.313 1.112A9.1 9.1 0 002 18.5a.5.5 0 01-.5-.5v-.1a.5.5 0 01.4-.5c1.24-.24 2.36-.8 3.258-1.572C3.768 15.183 3 12.7 3 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div>
-                <h2 className="font-semibold">Assistente Virtual</h2>
-                <p className="text-xs text-blue-100">Online</p>
-              </div>
-            </div>
+          <div className="bg-green-600 p-4 flex justify-between items-center">
+            <h3 className="text-white font-medium">Assistente Virtual</h3>
             <button 
-              onClick={() => setIsOpen(false)}
-              className="text-blue-100 hover:text-white transition-colors"
+              onClick={handleCloseChat}
+              className="text-white hover:text-gray-200 focus:outline-none"
               aria-label="Fechar chat"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -219,12 +240,12 @@ export default function ChatBot() {
                   <div 
                     className={`max-w-[85%] p-3 rounded-2xl ${
                       msg.sender === 'user' 
-                        ? 'bg-blue-600 text-white rounded-br-none' 
-                        : 'bg-white text-gray-800 rounded-bl-none shadow-sm border border-gray-200'
+                        ? 'bg-green-600 text-white rounded-br-none' 
+                        : 'bg-gray-100 text-gray-800 rounded-bl-none'
                     }`}
                   >
                     <p className="text-sm">{msg.text}</p>
-                    <div className={`text-xs mt-1 ${msg.sender === 'user' ? 'text-blue-200' : 'text-gray-400'}`}>
+                    <div className={`text-xs mt-1 ${msg.sender === 'user' ? 'text-green-200' : 'text-gray-400'}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </div>
                   </div>
@@ -241,13 +262,13 @@ export default function ChatBot() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Digite sua mensagem..."
-                className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 aria-label="Digite sua mensagem"
               />
-              <button 
+              <button
                 type="submit"
-                className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors"
-                aria-label="Enviar mensagem"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-green-100 text-green-600 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200"
+                disabled={isLoading}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />
@@ -258,11 +279,23 @@ export default function ChatBot() {
           </form>
         </div>
       ) : (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-blue-600 text-white p-4 rounded-full shadow-xl hover:bg-blue-700 transition-all transform hover:scale-105"
-          aria-label="Abrir chat de atendimento"
-        >
+        <div className="flex items-center">
+          {showTooltip && (
+            <div className="bg-white text-gray-800 text-sm px-3 py-2 rounded-lg shadow-md mr-3 mb-2 animate-fade-in">
+              <div className="flex items-center">
+                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                <span>Tire suas dúvidas com o ChatBot!</span>
+              </div>
+              <div className="absolute right-3 -bottom-1 w-3 h-3 transform rotate-45 bg-white"></div>
+            </div>
+          )}
+          <button
+            onClick={handleOpenChat}
+            className="w-12 h-12 rounded-full bg-green-600 text-white flex items-center justify-center shadow-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200 transform hover:scale-110"
+            aria-label="Abrir chat"
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+          >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             className="h-7 w-7" 
@@ -277,7 +310,8 @@ export default function ChatBot() {
               d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" 
             />
           </svg>
-        </button>
+          </button>
+        </div>
       )}
     </div>
   );

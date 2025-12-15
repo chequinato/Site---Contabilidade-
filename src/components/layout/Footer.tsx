@@ -22,8 +22,8 @@ export function Footer() {
 
   const contactInfo = [
     { icon: <FaMapMarkerAlt />, text: 'Rua Exemplo, 123 - Centro, São Paulo - SP' },
-    { icon: <FaPhoneAlt />, text: '(11) 99999-9999' },
-    { icon: <FaEnvelope />, text: 'contato@contadormaster.com.br' },
+    { icon: <FaPhoneAlt />, text: '(11) 96592-7355' },
+    { icon: <FaEnvelope />, text: 'martrovo@uol.com.br' },
     { icon: <FaClock />, text: 'Seg-Sex: 9h às 18h' },
   ];
 

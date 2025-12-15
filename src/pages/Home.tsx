@@ -3,6 +3,7 @@ import Services from '../components/sections/Services';
 import About from '../components/sections/About';
 import Contact from '../components/sections/Contact';
 import FAQ from '../components/sections/FAQ';
+import CurrencyRates from '../components/sections/CurrencyRates';
 import FeaturedTestimonials from '../components/sections/FeaturedTestimonials';
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
       <FeaturedTestimonials />
       <Contact />
       <FAQ />
+      <CurrencyRates />
     </>
   );
 };
