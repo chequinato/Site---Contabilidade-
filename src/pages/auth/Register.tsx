@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, User, Phone, Building, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Layout } from "@/components/layout/Layout";
@@ -87,7 +87,7 @@ export default function Register() {
                 }
               />
 
-              <Button className="w-full" size="lg" disabled={isLoading}>
+              <Button className="w-full py-3" disabled={isLoading}>
                 {isLoading ? "Criando..." : "Criar conta"}
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>

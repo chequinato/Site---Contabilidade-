@@ -83,7 +83,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <Button className="w-full" size="lg" disabled={isLoading}>
+              <Button className="w-full py-3" disabled={isLoading}>
                 {isLoading ? "Entrando..." : "Entrar"}
                 <ArrowRight className="h-5 w-5 ml-2" />
               </Button>

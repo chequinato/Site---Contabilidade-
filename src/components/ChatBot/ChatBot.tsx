@@ -14,8 +14,7 @@ export default function ChatBot() {
   const [showTooltip, setShowTooltip] = useState(false);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const [messages, setMessages] = useState<Message[]>([
+    const [messages, setMessages] = useState<Message[]>([
     { 
       id: 1, 
       text: 'Olá! Sou o assistente virtual do escritório. Como posso te ajudar hoje?', 

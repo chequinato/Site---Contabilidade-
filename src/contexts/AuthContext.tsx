@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const result = await signIn(email, password);
       
-      if (result.success && result.data) {
+      if (result?.success && result?.data) {
         setUser(result.data);
         return true;
       }
@@ -86,7 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         userData.cnpj
       );
       
-      if (result.success && result.data) {
+      if (result?.success && result?.data) {
         setUser(result.data);
         return true;
       }

@@ -46,6 +46,7 @@ export default function RegisterPage() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        confirmPassword: formData.password,
         companyName: formData.companyName,
         cnpj: formData.cnpj,
       });

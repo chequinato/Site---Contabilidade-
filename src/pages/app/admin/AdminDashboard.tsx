@@ -5,12 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { 
   FaBuilding, 
   FaUsers, 
-  FaChartLine, 
   FaFileInvoiceDollar, 
   FaMoneyBillWave, 
-  FaShieldAlt,
   FaSearch,
-  FaFilter,
   FaDownload,
   FaPlus,
   FaEye,
