@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import {
-  FaArrowUp,
-  FaArrowDown,
   FaPlus,
   FaEye,
   FaReceipt,
@@ -27,11 +24,11 @@ interface Transaction {
 }
 
 export default function TransacoesPage() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
@@ -42,12 +39,10 @@ export default function TransacoesPage() {
   const [showImportModal, setShowImportModal] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
-
     const loadTransactions = async () => {
       try {
         setLoading(true);
-        const data = await getTransactions(user.id);
+        const data = await getTransactions();
         setTransactions(data || []);
       } catch (err) {
         console.error('Erro ao carregar transações:', err);
@@ -58,7 +53,7 @@ export default function TransacoesPage() {
     };
 
     loadTransactions();
-  }, [user]);
+  }, []);
 
   const categories = [
     { label: 'Todas', value: 'all' },
@@ -127,9 +122,7 @@ export default function TransacoesPage() {
             </Link>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Transações</h1>
-              <p className="text-sm text-gray-500">
-                Controle financeiro completo
-              </p>
+              <p className="text-sm text-gray-500">Controle financeiro completo</p>
             </div>
           </div>
 
@@ -164,7 +157,6 @@ export default function TransacoesPage() {
 
       {/* CONTEÚDO */}
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* RESUMO */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           <SummaryCard label="Receitas" value={totalIncome} type="income" />
           <SummaryCard label="Despesas" value={totalExpenses} type="expense" />
@@ -228,25 +220,14 @@ export default function TransacoesPage() {
             <tbody>
               {filteredTransactions.map(t => (
                 <tr key={t.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">
-                    {new Date(t.date).toLocaleDateString('pt-BR')}
-                  </td>
+                  <td className="p-3">{new Date(t.date).toLocaleDateString('pt-BR')}</td>
                   <td className="p-3">{t.description}</td>
                   <td className="p-3">{t.category}</td>
                   <td className="p-3">{t.document}</td>
-                  <td
-                    className={`p-3 font-semibold ${
-                      t.type === 'income'
-                        ? 'text-green-600'
-                        : 'text-red-600'
-                    }`}
-                  >
-                    {t.type === 'income' ? '+' : '-'} R${' '}
-                    {Math.abs(t.amount).toLocaleString('pt-BR')}
+                  <td className={`p-3 font-semibold ${t.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                    {t.type === 'income' ? '+' : '-'} R$ {Math.abs(t.amount).toLocaleString('pt-BR')}
                   </td>
-                  <td className="p-3">
-                    {t.status === 'completed' ? 'Concluído' : 'Pendente'}
-                  </td>
+                  <td className="p-3">{t.status === 'completed' ? 'Concluído' : 'Pendente'}</td>
                   <td className="p-3 flex gap-2">
                     <FaEye />
                     <FaReceipt />
@@ -275,7 +256,6 @@ export default function TransacoesPage() {
   );
 }
 
-/* ---------- COMPONENTE AUX ---------- */
 function SummaryCard({
   label,
   value,
@@ -297,9 +277,7 @@ function SummaryCard({
   return (
     <div className="bg-white border rounded-xl p-6">
       <p className="text-sm text-gray-500">{label}</p>
-      <p className={`text-2xl font-bold ${color}`}>
-        R$ {value.toLocaleString('pt-BR')}
-      </p>
+      <p className={`text-2xl font-bold ${color}`}>R$ {value.toLocaleString('pt-BR')}</p>
     </div>
   );
 }

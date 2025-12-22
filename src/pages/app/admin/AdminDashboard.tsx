@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import {
@@ -15,7 +14,7 @@ import { getCompanies, deleteCompany } from '@/lib/database';
 import type { Company } from '@/lib/database';
 
 export default function AdminDashboard() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -38,7 +37,6 @@ export default function AdminDashboard() {
     loadCompanies();
   }
 
-  /* ===== MÉTRICAS DO CONTADOR ===== */
   const totalEmpresas = companies.length;
   const empresasAtivas = companies.filter(c => c.status === 'active').length;
   const empresasPendentes = companies.filter(c => c.status === 'pending').length;
@@ -49,7 +47,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* HEADER */}
       <header className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
           <div>
@@ -76,7 +73,6 @@ export default function AdminDashboard() {
           <p>Carregando dados...</p>
         ) : (
           <>
-            {/* ===== CARDS ===== */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
               <Card title="Empresas cadastradas" value={totalEmpresas} icon={FaBuilding} />
               <Card title="Empresas ativas" value={empresasAtivas} icon={FaUsers} />
@@ -93,7 +89,6 @@ export default function AdminDashboard() {
               />
             </div>
 
-            {/* ===== LISTA DE EMPRESAS ===== */}
             <div className="bg-white border rounded-xl">
               <div className="p-6 border-b flex justify-between items-center">
                 <h2 className="font-semibold text-lg">Empresas</h2>
@@ -118,10 +113,8 @@ export default function AdminDashboard() {
 
                 <tbody>
                   {companies.map(company => (
-                    <motion.tr
+                    <tr
                       key={company.id}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
                       className="border-t hover:bg-gray-50"
                     >
                       <td className="px-6 py-4">
@@ -162,7 +155,7 @@ export default function AdminDashboard() {
                           <FaTrash />
                         </button>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>
@@ -174,7 +167,6 @@ export default function AdminDashboard() {
   );
 }
 
-/* ===== CARD COMPONENT ===== */
 function Card({
   title,
   value,
@@ -193,9 +185,7 @@ function Card({
         <p className="text-2xl font-bold">{value}</p>
       </div>
       <div
-        className={`p-3 rounded-lg ${
-          danger ? 'bg-red-600' : 'bg-blue-600'
-        } text-white`}
+        className={`p-3 rounded-lg ${danger ? 'bg-red-600' : 'bg-blue-600'} text-white`}
       >
         <Icon />
       </div>
