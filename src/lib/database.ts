@@ -118,19 +118,67 @@ export const signIn = async (email: string, password: string) => {
       password
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase auth error:', error);
+      throw error;
+    }
 
     // Buscar dados do usuário na tabela users
     if (data.user) {
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', data.user.id)
-        .single();
+      try {
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', data.user.id)
+          .single();
 
-      if (userError) throw userError;
+        if (userError) {
+          // Se o usuário não existe na tabela users, criar um registro básico
+          if (userError.code === 'PGRST116') {
+            // Verificar se é o admin hardcoded
+            if (email === 'admin@contador.com') {
+              const { data: newAdmin, error: createError } = await supabase
+                .from('users')
+                .insert([
+                  {
+                    id: data.user.id,
+                    email: data.user.email!,
+                    name: 'Administrador',
+                    role: 'admin'
+                  }
+                ])
+                .select()
+                .single();
 
-      return { success: true, data: userData };
+              if (createError) throw createError;
+              return { success: true, data: newAdmin };
+            }
+            
+            // Para usuários clientes, criar registro básico
+            const { data: newUser, error: createError } = await supabase
+              .from('users')
+              .insert([
+                {
+                  id: data.user.id,
+                  email: data.user.email!,
+                  name: data.user.user_metadata?.name || 'Usuário',
+                  role: 'client'
+                }
+              ])
+              .select()
+              .single();
+
+            if (createError) throw createError;
+            return { success: true, data: newUser };
+          }
+          throw userError;
+        }
+
+        return { success: true, data: userData };
+      } catch (dbError) {
+        console.error('Database error:', dbError);
+        throw dbError;
+      }
     }
   } catch (error) {
     console.error('Erro no login:', error);

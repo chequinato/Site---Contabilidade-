@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
+import { getTaxDeadlines } from '@/lib/database';
 import { 
   FaUsers, 
   FaShieldAlt, 
@@ -14,13 +16,36 @@ import {
 } from 'react-icons/fa';
 
 export default function PrevidenciarioPage() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const [benefits, setBenefits] = useState<{name: string, value: string, deadline: string, status: string}[]>([]);
 
-  const benefits = [
-    { name: 'FGTS', value: 'R$ 4.500', deadline: '2024-01-20', status: 'urgent' },
-    { name: 'INSS', value: 'R$ 8.200', deadline: '2024-01-25', status: 'warning' },
-    { name: 'PIS', value: 'R$ 1.200', deadline: '2024-01-30', status: 'normal' },
-  ];
+  useEffect(() => {
+    const loadData = async () => {
+      if (!user) return;
+      
+      try {
+        const taxDeadlines = await getTaxDeadlines(user.id);
+        
+        // Filtrar apenas benefícios previdenciários
+        const previdenciarioBenefits = taxDeadlines
+          .filter(tax => ['FGTS', 'INSS', 'PIS'].includes(tax.name))
+          .map(tax => ({
+            name: tax.name,
+            value: `R$ ${tax.amount}`,
+            deadline: new Date(tax.deadline).toLocaleDateString('pt-BR'),
+            status: new Date(tax.deadline) < new Date() ? 'urgent' : 
+                   new Date(tax.deadline) <= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) ? 'warning' : 'normal'
+          }));
+        
+        setBenefits(previdenciarioBenefits);
+      } catch (error) {
+        console.error('Erro ao carregar benefícios:', error);
+        setBenefits([]);
+      }
+    };
+
+    loadData();
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-50">

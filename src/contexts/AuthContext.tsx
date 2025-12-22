@@ -58,12 +58,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (result?.success && result?.data) {
         setUser(result.data);
         return true;
+      } else if (result?.error) {
+        // Propagar o erro para ser tratado no componente
+        throw result.error;
       }
       
       return false;
     } catch (error) {
       console.error('Erro no login:', error);
-      return false;
+      // Não retorna false, propaga o erro para o componente tratar
+      throw error;
     } finally {
       setIsLoading(false);
     }

@@ -14,6 +14,8 @@ import {
   FaReceipt,
   FaEye
 } from 'react-icons/fa';
+import NewTransactionModal from '@/components/transactions/NewTransactionModal';
+import ImportExportModal from '@/components/transactions/ImportExportModal';
 
 // Mock data para demonstração
 const mockTransactions = [
@@ -114,8 +116,11 @@ export default function TransacoesPage() {
   const [filterMethod, setFilterMethod] = useState('Todas');
   const [filterType, setFilterType] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImportExportOpen, setIsImportExportOpen] = useState(false);
+  const [transactions, setTransactions] = useState(mockTransactions);
 
-  const filteredTransactions = mockTransactions.filter(transaction => {
+  const filteredTransactions = transactions.filter(transaction => {
     const matchesSearch = transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          transaction.document.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'Todas' || transaction.category === filterCategory;
@@ -124,6 +129,14 @@ export default function TransacoesPage() {
     
     return matchesSearch && matchesCategory && matchesMethod && matchesType;
   });
+
+  const handleAddTransaction = (newTransaction: any) => {
+    setTransactions(prev => [newTransaction, ...prev]);
+  };
+
+  const handleImportTransactions = (importedTransactions: any[]) => {
+    setTransactions(prev => [...importedTransactions, ...prev]);
+  };
 
   const totalIncome = filteredTransactions
     .filter(t => t.type === 'income')
@@ -152,7 +165,7 @@ export default function TransacoesPage() {
             </div>
             <div className="flex items-center space-x-4">
               <button 
-                onClick={() => alert('Funcionalidade de adicionar transação em desenvolvimento')}
+                onClick={() => setIsModalOpen(true)}
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center"
               >
                 <FaPlus className="mr-2" />
@@ -265,7 +278,7 @@ export default function TransacoesPage() {
 
             {/* Export */}
             <button 
-              onClick={() => alert('Funcionalidade de exportar em desenvolvimento')}
+              onClick={() => setIsImportExportOpen(true)}
               className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center"
             >
               <FaDownload className="mr-2" />
@@ -416,6 +429,19 @@ export default function TransacoesPage() {
           </div>
         </motion.div>
       </div>
+
+      <NewTransactionModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddTransaction}
+      />
+      
+      <ImportExportModal
+        isOpen={isImportExportOpen}
+        onClose={() => setIsImportExportOpen(false)}
+        transactions={transactions}
+        onImportTransactions={handleImportTransactions}
+      />
     </div>
   );
 }

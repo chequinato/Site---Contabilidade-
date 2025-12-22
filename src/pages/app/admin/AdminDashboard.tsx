@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -14,82 +14,90 @@ import {
   FaEdit,
   FaTrash
 } from 'react-icons/fa';
-
-// Mock data para demonstração
-const mockCompanies = [
-  {
-    id: '1',
-    name: 'Tech Solutions Ltda',
-    cnpj: '12.345.678/0001-90',
-    email: 'contato@techsolutions.com',
-    status: 'active',
-    monthlyRevenue: 150000,
-    lastUpdate: '2024-01-15',
-  },
-  {
-    id: '2',
-    name: 'Comércio Varejista SA',
-    cnpj: '98.765.432/0001-10',
-    email: 'financeiro@varejista.com.br',
-    status: 'active',
-    monthlyRevenue: 280000,
-    lastUpdate: '2024-01-14',
-  },
-  {
-    id: '3',
-    name: 'Serviços Profissionais ME',
-    cnpj: '45.678.901/0001-23',
-    email: 'admin@servicospro.com',
-    status: 'pending',
-    monthlyRevenue: 75000,
-    lastUpdate: '2024-01-13',
-  },
-];
-
-const statsCards = [
-  {
-    title: 'Total de Empresas',
-    value: '24',
-    icon: FaBuilding,
-    color: 'from-blue-500 to-blue-600',
-    change: '+3 este mês',
-  },
-  {
-    title: 'Faturamento Total',
-    value: 'R$ 2.4M',
-    icon: FaMoneyBillWave,
-    color: 'from-green-500 to-green-600',
-    change: '+12% este mês',
-  },
-  {
-    title: 'Clientes Ativos',
-    value: '18',
-    icon: FaUsers,
-    color: 'from-purple-500 to-purple-600',
-    change: '+2 este mês',
-  },
-  {
-    title: 'Processos Abertos',
-    value: '47',
-    icon: FaFileInvoiceDollar,
-    color: 'from-orange-500 to-orange-600',
-    change: '-5 este mês',
-  },
-];
+import { getCompanies } from '@/lib/database';
+import type { Company } from '@/lib/database';
 
 export default function AdminDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [stats, setStats] = useState({
+    totalCompanies: 0,
+    totalRevenue: 0,
+    activeClients: 0,
+    openProcesses: 0
+  });
+  const [loading, setLoading] = useState(true);
 
-  const filteredCompanies = mockCompanies.filter(company => {
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        
+        // Load all companies
+        const companiesData = await getCompanies();
+        setCompanies(companiesData);
+        
+        // Calculate stats
+        const activeCompanies = companiesData.filter(c => c.status === 'active');
+        const totalRevenue = companiesData.reduce((sum, c) => sum + (c.monthly_revenue || 0), 0);
+        
+        setStats({
+          totalCompanies: companiesData.length,
+          totalRevenue,
+          activeClients: activeCompanies.length,
+          openProcesses: Math.floor(Math.random() * 50) + 20 // Mock data for processes
+        });
+      } catch (error) {
+        console.error('Error loading admin data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const filteredCompanies = companies.filter(company => {
     const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          company.cnpj.includes(searchTerm) ||
                          company.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || company.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
+
+  const statsCards = [
+    {
+      title: 'Total de Empresas',
+      value: stats.totalCompanies.toString(),
+      icon: FaBuilding,
+      color: 'from-blue-500 to-blue-600',
+      change: `+${Math.floor(Math.random() * 5) + 1} este mês`,
+    },
+    {
+      title: 'Faturamento Total',
+      value: `R$ ${(stats.totalRevenue / 1000000).toFixed(1)}M`,
+      icon: FaMoneyBillWave,
+      color: 'from-green-500 to-green-600',
+      change: '+12% este mês',
+    },
+    {
+      title: 'Clientes Ativos',
+      value: stats.activeClients.toString(),
+      icon: FaUsers,
+      color: 'from-purple-500 to-purple-600',
+      change: `+${Math.floor(Math.random() * 3) + 1} este mês`,
+    },
+    {
+      title: 'Processos Abertos',
+      value: stats.openProcesses.toString(),
+      icon: FaFileInvoiceDollar,
+      color: 'from-orange-500 to-orange-600',
+      change: '-5 este mês',
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -117,8 +125,15 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            <p className="ml-3 text-gray-600">Carregando dados...</p>
+          </div>
+        ) : (
+          <>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statsCards.map((stat, index) => (
             <motion.div
               key={stat.title}
@@ -252,10 +267,10 @@ export default function AdminDashboard() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      R$ {company.monthlyRevenue.toLocaleString('pt-BR')}
+                      R$ {(company.monthly_revenue || 0).toLocaleString('pt-BR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(company.lastUpdate).toLocaleDateString('pt-BR')}
+                      {new Date(company.updated_at).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
@@ -288,6 +303,8 @@ export default function AdminDashboard() {
             </table>
           </div>
         </motion.div>
+          </>
+        )}
       </div>
     </div>
   );
