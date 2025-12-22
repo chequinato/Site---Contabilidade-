@@ -53,63 +53,88 @@ export interface TaxDeadline {
 }
 
 // Funções de autenticação
-export const signUp = async (email: string, password: string, name: string, companyName?: string, cnpj?: string) => {
+export const signUp = async (
+  email: string,
+  password: string,
+  name: string,
+  companyName?: string,
+  cnpj?: string
+) => {
   try {
-    // 1. Criar usuário no Supabase Auth
+    // 1. Tentar criar usuário no Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          name,
-          role: 'client'
-        }
-      }
+      options: { data: { name, role: 'client' } }
     });
 
-    if (authError) throw authError;
-
-    if (authData.user) {
-      // 2. Criar perfil do usuário na tabela users
-      const { data: userData, error: userError } = await supabase
+    // Se falhar porque já existe, vamos usar o ID que já está na tabela users
+    if (authError && authError.message.includes('already registered')) {
+      console.warn('Usuário já registrado no Auth, usando registro existente');
+      // Buscar usuário existente na tabela users pelo email
+      const { data: existingUser, error: userError } = await supabase
         .from('users')
-        .insert([
-          {
-            id: authData.user.id,
-            email: authData.user.email!,
-            name,
-            role: 'client'
-          }
-        ])
-        .select()
+        .select('*')
+        .eq('email', email)
         .single();
-
       if (userError) throw userError;
 
-      // 3. Se for cliente, criar a empresa
+      // Se veio companyName e cnpj, tenta criar empresa
+      let companyData = null;
       if (companyName && cnpj) {
-        const { error: companyError } = await supabase
+        const { data: existingCompany } = await supabase
           .from('companies')
-          .insert([
-            {
-              name: companyName,
-              cnpj,
-              email,
-              status: 'pending',
-              user_id: authData.user.id
-            }
-          ]);
-
-        if (companyError) throw companyError;
+          .select('*')
+          .eq('user_id', existingUser.id)
+          .single();
+        if (!existingCompany) {
+          const { data: newCompany, error: companyError } = await supabase
+            .from('companies')
+            .insert([{ name: companyName, cnpj, email, status: 'pending', user_id: existingUser.id }])
+            .select()
+            .single();
+          if (companyError) throw companyError;
+          companyData = newCompany;
+        } else {
+          companyData = existingCompany;
+        }
       }
 
-      return { success: true, data: userData };
+      return { success: true, data: { user: existingUser, company: companyData } };
     }
+
+    if (authError) throw authError;
+    if (!authData.user) throw new Error('Usuário não foi criado no Auth');
+
+    const userId = authData.user.id;
+
+    // 2. Criar usuário na tabela users
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .insert([{ id: userId, email, name, role: 'client' }])
+      .select()
+      .single();
+    if (userError) throw userError;
+
+    // 3. Criar empresa
+    let companyData = null;
+    if (companyName && cnpj) {
+      const { data, error } = await supabase
+        .from('companies')
+        .insert([{ name: companyName, cnpj, email, status: 'pending', user_id: userId }])
+        .select()
+        .single();
+      if (error) throw error;
+      companyData = data;
+    }
+
+    return { success: true, data: { user: userData, company: companyData } };
   } catch (error) {
     console.error('Erro no cadastro:', error);
     return { success: false, error };
   }
 };
+
 
 export const signIn = async (email: string, password: string) => {
   try {

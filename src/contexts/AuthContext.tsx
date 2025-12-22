@@ -34,7 +34,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar usuário atual ao carregar
     const checkUser = async () => {
       try {
         const currentUser = await getCurrentUser();
@@ -51,22 +50,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    
     try {
       const result = await signIn(email, password);
-      
       if (result?.success && result?.data) {
         setUser(result.data);
         return true;
-      } else if (result?.error) {
-        // Propagar o erro para ser tratado no componente
-        throw result.error;
       }
-      
+      if (result?.error) throw result.error;
       return false;
     } catch (error) {
       console.error('Erro no login:', error);
-      // Não retorna false, propaga o erro para o componente tratar
       throw error;
     } finally {
       setIsLoading(false);
@@ -74,35 +67,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {
-    setIsLoading(true);
-    
-    try {
-      // Validação básica
-      if (userData.password !== userData.confirmPassword) {
-        return false;
-      }
-
-      const result = await signUp(
-        userData.email,
-        userData.password,
-        userData.name,
-        userData.companyName,
-        userData.cnpj
-      );
-      
-      if (result?.success && result?.data) {
-        setUser(result.data);
-        return true;
-      }
-      
-      return false;
-    } catch (error) {
-      console.error('Erro no cadastro:', error);
-      return false;
-    } finally {
-      setIsLoading(false);
+  setIsLoading(true);
+  try {
+    if (userData.password !== userData.confirmPassword) {
+      throw new Error('As senhas não coincidem');
     }
-  };
+
+    const result = await signUp(
+      userData.email,
+      userData.password,
+      userData.name,
+      userData.companyName,
+      userData.cnpj
+    );
+
+    if (result.success && result.data) {
+      setUser(result.data.user); // já inclui company se tiver
+      return true;
+    }
+
+    if (result.error) throw result.error;
+    return false;
+  } catch (error: any) {
+    console.error('Erro no cadastro:', error);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const logout = async () => {
     try {
@@ -110,7 +103,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
     } catch (error) {
       console.error('Erro no logout:', error);
-      setUser(null); // Força logout mesmo se der erro
+      setUser(null);
     }
   };
 
@@ -118,15 +111,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isClient = () => user?.role === 'client';
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      login,
-      register,
-      logout,
-      isLoading,
-      isAdmin,
-      isClient
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        isLoading,
+        isAdmin,
+        isClient,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -134,8 +129,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 }

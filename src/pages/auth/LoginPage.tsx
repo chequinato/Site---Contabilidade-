@@ -19,14 +19,17 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      const userRole = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).role : '';
-      navigate(userRole === 'admin' ? '/admin/dashboard' : '/client/dashboard');
+
+      // NÃO decide rota aqui
+      navigate('/redirecionando');
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Erro ao fazer login');
     } finally {
       setIsLoading(false);
     }
   };
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center px-4">
@@ -144,7 +147,7 @@ export default function LoginPage() {
             </div>
           </form>
 
-                  </motion.div>
+        </motion.div>
       </motion.div>
     </div>
   );
