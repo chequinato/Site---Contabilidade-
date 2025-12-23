@@ -1,12 +1,12 @@
-import express from 'express';
-import cors from 'cors';
+// api/register.ts
 import { supabaseAdmin } from './lib/supabaseAdmin';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-app.post('/register', async (req, res) => {
   const { name, email, password, companyName, cnpj } = req.body;
 
   if (!name || !email || !password || !companyName || !cnpj) {
@@ -44,7 +44,4 @@ app.post('/register', async (req, res) => {
     console.error('Erro no cadastro:', error);
     return res.status(500).json({ error: error.message || 'Erro desconhecido' });
   }
-});
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server rodando na porta ${PORT}`));
+}
