@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/contexts/AuthContext';
 import { FaLock, FaEnvelope, FaUser, FaBuilding, FaIdCard, FaArrowLeft } from 'react-icons/fa';
 
 export default function RegisterPage() {
@@ -15,7 +14,6 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,21 +40,23 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      await register({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        confirmPassword: formData.password,
-        companyName: formData.companyName,
-        cnpj: formData.cnpj,
+      const response = await fetch('http://localhost:4000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
       });
-      navigate('/client/dashboard');
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Erro no cadastro');
+
+      navigate('/client');
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Erro no cadastro');
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center px-4 py-8">
@@ -236,7 +236,7 @@ export default function RegisterPage() {
                 <FaArrowLeft className="mr-2" />
                 Voltar
               </Link>
-              
+
               <motion.button
                 type="submit"
                 disabled={isLoading}

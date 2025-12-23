@@ -6,23 +6,18 @@ import './index.css';
 import App from './App';
 import AppLayout from './pages/app/AppLayout';
 
-import {
-  Home,
-  FolhaPagamento,
-  Tributacao,
-  GestaoFinanceira,
-  Previdenciario,
-} from './pages';
+// SITE PÚBLICO
+import Home from './pages/site/Home';
 
-// Auth
+// AUTH
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
-// Contador
+// CONTADOR
 import AdminDashboard from './pages/app/admin/AdminDashboard';
 import EmpresaDashboard from './pages/app/admin/EmpresaDashboard';
 
-// Cliente
+// CLIENTE
 import ClientDashboard from './pages/app/client/ClientDashboard';
 import TransacoesPage from './pages/app/client/TransacoesPage';
 import TributacaoPage from './pages/app/client/TributacaoPage';
@@ -30,6 +25,7 @@ import GestaoFinanceiraPage from './pages/app/client/GestaoFinanceiraPage';
 import FolhaPagamentoPage from './pages/app/client/FolhaPagamentoPage';
 import PrevidenciarioPage from './pages/app/client/PrevidenciarioPage';
 
+// CONTEXT
 import { AuthProvider } from '@/contexts/AuthContext';
 import RedirectByRole from './pages/RedirectByRole';
 
@@ -38,17 +34,12 @@ createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <Router>
         <Routes>
-
           {/* REDIRECIONAMENTO POR FUNÇÃO */}
           <Route path="/redirecionando" element={<RedirectByRole />} />
 
           {/* SITE PÚBLICO */}
           <Route path="/" element={<App />}>
             <Route index element={<Home />} />
-            <Route path="folha-pagamento" element={<FolhaPagamento />} />
-            <Route path="tributacao" element={<Tributacao />} />
-            <Route path="gestao-financeira" element={<GestaoFinanceira />} />
-            <Route path="previdenciario" element={<Previdenciario />} />
           </Route>
 
           {/* AUTH */}
@@ -62,7 +53,7 @@ createRoot(document.getElementById('root')!).render(
           </Route>
 
           {/* ÁREA DO CLIENTE */}
-          <Route path="/cliente" element={<AppLayout />}>
+          <Route path="/client" element={<AppLayout />}>
             <Route index element={<ClientDashboard />} />
             <Route path="transacoes" element={<TransacoesPage />} />
             <Route path="tributacao" element={<TributacaoPage />} />
@@ -70,7 +61,6 @@ createRoot(document.getElementById('root')!).render(
             <Route path="folha-pagamento" element={<FolhaPagamentoPage />} />
             <Route path="previdenciario" element={<PrevidenciarioPage />} />
           </Route>
-
         </Routes>
       </Router>
     </AuthProvider>

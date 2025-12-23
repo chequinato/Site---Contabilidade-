@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,7 +9,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const [justLoggedIn, setJustLoggedIn] = useState(false);
+
+  const { login, user, isAdmin, isClient, isLoading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,9 +21,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-
-      // NÃO decide rota aqui
-      navigate('/redirecionando');
+      setJustLoggedIn(true); // sinaliza login recente
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login');
     } finally {
@@ -29,7 +29,23 @@ export default function LoginPage() {
     }
   };
 
+  // Navegação condicional após login
+  useEffect(() => {
+    if (user && justLoggedIn) {
+      if (isAdmin()) navigate('/contador');   // rota admin
+      else if (isClient()) navigate('/client'); // rota cliente
+      setJustLoggedIn(false);
+    }
+  }, [user, justLoggedIn, navigate, isAdmin, isClient]);
 
+  // Loader enquanto contexto carrega
+  if (authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-600"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center px-4">
@@ -43,14 +59,12 @@ export default function LoginPage() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring" }}
+            transition={{ delay: 0.2, type: 'spring' }}
             className="mx-auto h-16 w-16 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full flex items-center justify-center shadow-lg"
           >
             <FaBuilding className="h-8 w-8 text-white" />
           </motion.div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Área do Cliente
-          </h2>
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">Área do Cliente</h2>
           <p className="mt-2 text-sm text-gray-600">
             Entre na sua conta para acessar seus dados contábeis
           </p>
@@ -64,9 +78,7 @@ export default function LoginPage() {
         >
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email
-              </label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <FaEnvelope className="h-5 w-5 text-gray-400" />
@@ -85,9 +97,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Senha
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">Senha</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <FaLock className="h-5 w-5 text-gray-400" />
@@ -128,25 +138,19 @@ export default function LoginPage() {
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                     Entrando...
                   </div>
-                ) : (
-                  'Entrar'
-                )}
+                ) : 'Entrar'}
               </motion.button>
             </div>
 
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Não tem uma conta?{' '}
-                <Link
-                  to="/auth/register"
-                  className="font-medium text-green-600 hover:text-green-500 transition-colors"
-                >
+                <Link to="/auth/register" className="font-medium text-green-600 hover:text-green-500 transition-colors">
                   Cadastre-se
                 </Link>
               </p>
             </div>
           </form>
-
         </motion.div>
       </motion.div>
     </div>
