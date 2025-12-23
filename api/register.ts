@@ -1,5 +1,5 @@
 // api/register.ts
-import { supabaseAdmin } from './lib/supabaseAdmin';
+import { supabaseAdmin } from './lib/supabaseAdmin.js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
